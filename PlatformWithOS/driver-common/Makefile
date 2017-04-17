@@ -30,6 +30,7 @@ CFLAGS += -DEPD_IO='"${EPD_IO}"'
 
 LDFLAGS += ${FUSE_LDFLAGS}
 LDFLAGS += -lrt
+LDFLAGS += -lm
 
 RM = rm -f
 
