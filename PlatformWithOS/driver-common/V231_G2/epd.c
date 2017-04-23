@@ -31,6 +31,7 @@
 // delays - more consistent naming
 #define Delay_ms(ms) usleep(1000 * (ms))
 #define Delay_us(us) usleep(us)
+#define T_FACT_MUL (100)
 #define LOW 0
 #define HIGH 1
 #define digitalRead(pin) GPIO_read(pin)
@@ -490,7 +491,7 @@ static void power_off(EPD_type *epd) {
 
 
 void EPD_set_temperature(EPD_type *epd, int temperature) {
-	epd->factored_stage_time = epd->base_stage_time * temperature_to_factor_10x(temperature) / 10;
+	epd->factored_stage_time = epd->base_stage_time * temperature_to_factor_10x(temperature) / T_FACT_MUL;
 }
 
 
@@ -532,13 +533,13 @@ void EPD_partial_image(EPD_type *epd, const uint8_t *old_image, const uint8_t *n
 // convert a temperature in Celsius to
 // the scale factor for frame_*_repeat methods
 static int temperature_to_factor_10x(int temperature) {
-	if (temperature > 50) {
-		temperature = 50;
+	if (temperature > 60) {
+		temperature = 60;
 	}
 	else if (temperature < -20) {
 		temperature = -20;
 	}
-	return (int) (62.321 * exp(-0.071 * temperature));
+	return (int) (T_FACT_MUL * 6.2321 * exp(-0.071 * temperature));
 }
 
 
